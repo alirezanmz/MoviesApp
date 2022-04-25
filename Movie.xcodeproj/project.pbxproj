@@ -18,6 +18,8 @@
 		5EAB8CBB2811AB71007FB98E /* MovieUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EAB8CBA2811AB71007FB98E /* MovieUITests.swift */; };
 		5EAB8CBD2811AB71007FB98E /* MovieUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EAB8CBC2811AB71007FB98E /* MovieUITestsLaunchTests.swift */; };
 		5EBB3B8228149F3400B0E2FE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5EBB3B8128149F3400B0E2FE /* Main.storyboard */; };
+		5EE9F4F2281706A8009CE373 /* WatchedMoviesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EE9F4F1281706A8009CE373 /* WatchedMoviesTableViewCell.swift */; };
+		5EE9F4F42817094C009CE373 /* ToWatchMoviesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EE9F4F32817094C009CE373 /* ToWatchMoviesTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +55,8 @@
 		5EAB8CBA2811AB71007FB98E /* MovieUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieUITests.swift; sourceTree = "<group>"; };
 		5EAB8CBC2811AB71007FB98E /* MovieUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		5EBB3B8128149F3400B0E2FE /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		5EE9F4F1281706A8009CE373 /* WatchedMoviesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchedMoviesTableViewCell.swift; sourceTree = "<group>"; };
+		5EE9F4F32817094C009CE373 /* ToWatchMoviesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToWatchMoviesTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +89,8 @@
 			children = (
 				5EAB8C9D2811AB6F007FB98E /* MoviesViewController.swift */,
 				5E30EB9B2815888B00383FBB /* FavoriteMoviesCollectionViewCell.swift */,
+				5EE9F4F1281706A8009CE373 /* WatchedMoviesTableViewCell.swift */,
+				5EE9F4F32817094C009CE373 /* ToWatchMoviesTableViewCell.swift */,
 			);
 			path = Movies;
 			sourceTree = "<group>";
@@ -290,6 +296,8 @@
 			files = (
 				5EAB8C9E2811AB6F007FB98E /* MoviesViewController.swift in Sources */,
 				5EAB8C9A2811AB6F007FB98E /* AppDelegate.swift in Sources */,
+				5EE9F4F2281706A8009CE373 /* WatchedMoviesTableViewCell.swift in Sources */,
+				5EE9F4F42817094C009CE373 /* ToWatchMoviesTableViewCell.swift in Sources */,
 				5EAB8C9C2811AB6F007FB98E /* SceneDelegate.swift in Sources */,
 				5E30EB9C2815888B00383FBB /* FavoriteMoviesCollectionViewCell.swift in Sources */,
 				5E30EB9A281539E600383FBB /* Constants.swift in Sources */,
