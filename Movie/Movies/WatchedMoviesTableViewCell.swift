@@ -34,6 +34,7 @@ class WatchedMoviesTableViewCell: UITableViewCell {
         Title.trailingAnchor.constraint(equalTo: marginGuide.trailingAnchor).isActive = true
         Title.topAnchor.constraint(equalTo: marginGuide.topAnchor, constant: 5).isActive = true
         Title.font = UIFont(name: "Avenir-Book", size: 23)
+        
         BackView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         BackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0).isActive = true
         BackView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true

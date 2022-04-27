@@ -15,7 +15,6 @@ open class APIService {
         AF.request(url, method: .get, parameters: nil).response { response in
             ANActivityIndicatorPresenter.shared.hideIndicator()
             guard let data = response.data else { return }
-            print("responseModel",data.count)
             let jsonDecoder = JSONDecoder()
             let responseModel = try? jsonDecoder.decode(MoviesResponse.self, from: data)
          
@@ -29,7 +28,6 @@ open class APIService {
         AF.request(url, method: .get, parameters: nil).response { response in
             ANActivityIndicatorPresenter.shared.hideIndicator()
             guard let data = response.data else { return }
-            print("responseModel",data.count)
             let jsonDecoder = JSONDecoder()
             let responseModel = try? jsonDecoder.decode(FavoriteResponse.self, from: data)
          

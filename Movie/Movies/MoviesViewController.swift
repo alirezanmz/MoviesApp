@@ -15,13 +15,11 @@ class MoviesViewController: UIViewController {
     var WatchedMovies:[Movies] = []
     var ToWatchedMovies:[Movies] = []
     var FavoriteIDs:[Favorite] = []
-    
     var TargetMovieForDetail:Movies?
-    
     var FavoriteListCollectionView: UICollectionView!
     let ToWatchedListTableView = UITableView(frame: .zero)
     let WatchedListTableView = UITableView(frame: .zero)
-    var AButton = UIButton(type: .system)
+    var NextButton = UIButton(type: .system)
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -112,14 +110,14 @@ extension MoviesViewController {
         
         CView.addSubview(CTopicName)
         CView.addSubview(ToWatchedListTableView)
-        view.addSubview(AButton)
+        view.addSubview(NextButton)
         
         
         
         AView.translatesAutoresizingMaskIntoConstraints = false
         BView.translatesAutoresizingMaskIntoConstraints = false
         CView.translatesAutoresizingMaskIntoConstraints = false
-        AButton.translatesAutoresizingMaskIntoConstraints = false
+        NextButton.translatesAutoresizingMaskIntoConstraints = false
         stackView.translatesAutoresizingMaskIntoConstraints = false
         FavoriteListCollectionView.translatesAutoresizingMaskIntoConstraints = false
         WatchedListTableView.translatesAutoresizingMaskIntoConstraints = false
@@ -159,18 +157,18 @@ extension MoviesViewController {
         BView.widthAnchor.constraint(equalToConstant: self.view.frame.width).isActive = true
         CView.widthAnchor.constraint(equalToConstant: self.view.frame.width).isActive = true
         
-        AButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20).isActive = true
-        AButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -40).isActive = true
-        AButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 40).isActive = true
-        AButton.heightAnchor.constraint(equalToConstant: 60).isActive = true
-        AButton.titleLabel?.font = UIFont(name: "Avenir-Book", size: 25)
-        AButton.layer.borderColor = UIColor.black.cgColor
+        NextButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20).isActive = true
+        NextButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -40).isActive = true
+        NextButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 40).isActive = true
+        NextButton.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        NextButton.titleLabel?.font = UIFont(name: "Avenir-Book", size: 25)
+        NextButton.layer.borderColor = UIColor.black.cgColor
         
-        AButton.layer.borderWidth = 3
-        AButton.layer.cornerRadius = 10
-        AButton.setTitleColor(UIColor.lightGray, for: .normal)
-        AButton.setTitle("Next", for: .normal)
-        AButton.backgroundColor = Constants.BackgroundColor.LightGray
+        NextButton.layer.borderWidth = 3
+        NextButton.layer.cornerRadius = 10
+        NextButton.setTitleColor(UIColor.lightGray, for: .normal)
+        NextButton.setTitle("Next", for: .normal)
+        NextButton.backgroundColor = Constants.BackgroundColor.LightGray
         
 //
 //        AButton.addAction(UIAction(handler: { re in
@@ -179,7 +177,7 @@ extension MoviesViewController {
 //        }), for: .touchUpInside)
 //
         
-        AButton.addTarget(self, action: #selector(NextBtn), for: .touchUpInside)
+        NextButton.addTarget(self, action: #selector(NextBtn), for: .touchUpInside)
         getMoviesList()
         
     }
@@ -213,15 +211,15 @@ extension MoviesViewController {
     
     func ActiveNextBtn() {
         UIView.animate(withDuration: 0.5) {
-            self.AButton.backgroundColor = Constants.BackgroundColor.Primary
-            self.AButton.titleLabel?.textColor = .white
+            self.NextButton.backgroundColor = Constants.BackgroundColor.Primary
+            self.NextButton.titleLabel?.textColor = .white
         }
     }
     
     func DisableNextBtn() {
         UIView.animate(withDuration: 0.5) {
-            self.AButton.backgroundColor = Constants.BackgroundColor.LightGray
-            self.AButton.titleLabel?.textColor = .lightGray
+            self.NextButton.backgroundColor = Constants.BackgroundColor.LightGray
+            self.NextButton.titleLabel?.textColor = .lightGray
         }
     }
     
@@ -246,7 +244,7 @@ extension MoviesViewController {
         }
         
         
-        //Remove existing data for WatchedMovies
+        //Remove duplicate data for WatchedMovies
         var FindOnlyNesseccryDataForWatched = FavoriteMovies
         for id in WatchedMovies {
             for (i,str) in FindOnlyNesseccryDataForWatched.enumerated().reversed()
@@ -264,24 +262,17 @@ extension MoviesViewController {
         
         
         var FindOnlyNesseccryDataForToWatch = FavoriteMovies
-        for id in ToWatchedMovies {
-            for (i,str) in FindOnlyNesseccryDataForToWatch.enumerated().reversed()
+        for FavIDs in ToWatchedMovies {
+            for (Index,Purpose) in FindOnlyNesseccryDataForToWatch.enumerated().reversed()
             {
-                if str.id == id.id
+                if Purpose.id == FavIDs.id
                 {
-                    FindOnlyNesseccryDataForToWatch.remove(at: i)
+                    FindOnlyNesseccryDataForToWatch.remove(at: Index)
                 }
             }
         }
         
         ToWatchedMovies.insert(contentsOf: FindOnlyNesseccryDataForToWatch, at: 0)
-        //        for i in 0..<ToWatchedMovies.count {
-        //
-        //            let ToWatchedResult = FindOutP.filter {
-        //                $0.id == ToWatchedMovies[i].id
-        //            }
-        //            print("ToWatchedResult",ToWatchedResult)
-        //        }
         
         self.FavoriteListCollectionView.reloadData()
         self.WatchedListTableView.reloadData()
