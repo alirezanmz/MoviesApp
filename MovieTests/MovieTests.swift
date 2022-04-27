@@ -19,6 +19,22 @@ class MovieTests: XCTestCase {
     }
 
     func testExample() throws {
+        
+        var MoviesList:[Movies] = []
+        var FavoriteIDs:[Favorite] = []
+
+        APIService().getMoviesList { MoviesResponse in
+            MoviesList = MoviesResponse?.results ?? MoviesList
+        }
+
+        APIService().getFavoritesList { FavoriteResponse in
+            FavoriteIDs = FavoriteResponse?.results ?? FavoriteIDs
+        }
+        for MoviesIndex in 0..<MoviesList.count {
+        for FavoriteIndex in 0..<FavoriteIDs.count {
+            XCTAssertEqual(FavoriteIDs[FavoriteIndex].id, MoviesList[MoviesIndex].id)
+        }
+        }
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
         // Any test you write for XCTest can be annotated as throws and async.
