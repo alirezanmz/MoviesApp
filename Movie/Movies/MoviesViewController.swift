@@ -68,8 +68,6 @@ extension MoviesViewController {
         
         let stackView = UIStackView()
         
-      
-        
         //StackOption
         stackView.axis  = NSLayoutConstraint.Axis.vertical
         stackView.distribution  = UIStackView.Distribution.fillEqually
@@ -112,8 +110,6 @@ extension MoviesViewController {
         CView.addSubview(ToWatchedListTableView)
         view.addSubview(NextButton)
         
-        
-        
         AView.translatesAutoresizingMaskIntoConstraints = false
         BView.translatesAutoresizingMaskIntoConstraints = false
         CView.translatesAutoresizingMaskIntoConstraints = false
@@ -123,14 +119,9 @@ extension MoviesViewController {
         WatchedListTableView.translatesAutoresizingMaskIntoConstraints = false
         ToWatchedListTableView.translatesAutoresizingMaskIntoConstraints = false
         
-        //        let constraints = [
-        //
-        //        ]
-        
         AView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100).isActive = true
         AView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
         AView.heightAnchor.constraint(equalToConstant: 150).isActive = true
-        // AView.bottomAnchor.constraint(equalTo: BView.bottomAnchor, constant: 0).isActive = true
         AView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0).isActive = true
         
         FavoriteListCollectionView.topAnchor.constraint(equalTo: AView.topAnchor, constant: 30).isActive = true
@@ -161,6 +152,7 @@ extension MoviesViewController {
         NextButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -40).isActive = true
         NextButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 40).isActive = true
         NextButton.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        
         NextButton.titleLabel?.font = UIFont(name: "Avenir-Book", size: 25)
         NextButton.layer.borderColor = UIColor.black.cgColor
         
@@ -170,12 +162,6 @@ extension MoviesViewController {
         NextButton.setTitle("Next", for: .normal)
         NextButton.backgroundColor = Constants.BackgroundColor.LightGray
         
-//
-//        AButton.addAction(UIAction(handler: { re in
-//
-//
-//        }), for: .touchUpInside)
-//
         
         NextButton.addTarget(self, action: #selector(NextBtn), for: .touchUpInside)
         getMoviesList()
@@ -196,16 +182,20 @@ extension MoviesViewController {
     
     func getMoviesList() {
         APIService().getMoviesList { [self] Response in
+            if Response != nil {
             self.MoviesList = Response?.results ?? self.MoviesList
             self.getFavoriteIDsList()
+            }
         }
     }
     
     
     func getFavoriteIDsList() {
         APIService().getFavoritesList { Response in
+            if Response != nil {
             self.FavoriteIDs = Response?.results ?? self.FavoriteIDs
             self.OrgnizeData()
+            }
         }
     }
     
