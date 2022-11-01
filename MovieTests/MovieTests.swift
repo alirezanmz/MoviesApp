@@ -22,7 +22,7 @@ class MovieTests: XCTestCase {
         
         var MoviesList:[Movies] = []
         var FavoriteIDs:[Favorite] = []
-        
+
         UnitTestService().getMoviesList { MoviesResponse in
             MoviesList = MoviesResponse?.results ?? MoviesList
             XCTAssertEqual(1, MoviesList[0].id)
@@ -31,7 +31,12 @@ class MovieTests: XCTestCase {
 
         UnitTestService().getFavoritesList { FavoriteResponse in
             FavoriteIDs = FavoriteResponse?.results ?? FavoriteIDs
-            XCTAssertEqual(1, FavoriteIDs[0].id)
+            if let result = FavoriteResponse?.results.isEmpty {
+                XCTAssertTrue(result)
+
+            }
+          
+            
         }
        
         // This is an example of a functional test case.

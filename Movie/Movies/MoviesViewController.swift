@@ -9,14 +9,15 @@ import UIKit
 import Kingfisher
 import SwiftUI
 class MoviesViewController: UIViewController{
-    
+    // MARK: Class props
     var MoviesList:[Movies] = []
     var FavoriteMovies:[Movies] = []
     var WatchedMovies:[Movies] = []
-    var ToWatchedMovies:[Movies] = []
+    var MustWatchedMovies:[Movies] = []
     var FavoriteIDs:[Favorite] = []
     var setSelectedDataForDetail:Movies?
     
+    // MARK: connections
     private lazy var layout:UICollectionViewFlowLayout = {
        let collectionViewFlowLayout = UICollectionViewFlowLayout()
           collectionViewFlowLayout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
@@ -133,9 +134,11 @@ class MoviesViewController: UIViewController{
     }
 }
 
-//: MARK
+// MARK: Extensions
+
+// MARK: MoviesViewController extensions
 extension MoviesViewController {
-    
+    // MARK: Class methods
     func configureUI() {
 
         FavoriteListCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -230,12 +233,11 @@ extension MoviesViewController {
         }
     }
     
-    
     func getFavoriteIDsList() {
         APIService().getFavoritesList { Response in
             if Response != nil {
                 self.FavoriteIDs = Response?.results ?? self.FavoriteIDs
-                self.OrgnizeData()
+                self.SortUpData()
             }
         }
     }
@@ -254,13 +256,13 @@ extension MoviesViewController {
         }
     }
     
-    func OrgnizeData() {
+    func SortUpData() {
         
         WatchedMovies = MoviesList.filter{
             $0.isWatched == true
         }
         
-        ToWatchedMovies = MoviesList.filter{
+        MustWatchedMovies = MoviesList.filter{
             $0.isWatched == false
         }
         
@@ -289,7 +291,7 @@ extension MoviesViewController {
         
         
         var FindOnlyNesseccryDataForToWatch = FavoriteMovies
-        for FavIDs in ToWatchedMovies {
+        for FavIDs in MustWatchedMovies {
             for (Index,Purpose) in FindOnlyNesseccryDataForToWatch.enumerated().reversed()
             {
                 if Purpose.id == FavIDs.id
@@ -299,7 +301,7 @@ extension MoviesViewController {
             }
         }
         
-        ToWatchedMovies.insert(contentsOf: FindOnlyNesseccryDataForToWatch, at: 0)
+        MustWatchedMovies.insert(contentsOf: FindOnlyNesseccryDataForToWatch, at: 0)
         reloadCollectionViews()
       
        
@@ -315,14 +317,14 @@ extension MoviesViewController {
 }
 
     
-
+// MARK: UITableViewDelegate, UITableViewDataSource extensions
 extension MoviesViewController: UITableViewDelegate,UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         if tableView.tag == 1 {
             return WatchedMovies.count
         }else if tableView.tag == 2 {
-            return ToWatchedMovies.count
+            return MustWatchedMovies.count
         }
         
         return 0
@@ -347,14 +349,14 @@ extension MoviesViewController: UITableViewDelegate,UITableViewDataSource {
             
         }else if tableView.tag == 2 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! MustWatchMoviesTableViewCell
-            cell.title.text = ToWatchedMovies[indexPath.row].title
-            let url = URL(string: Constants.retrievingImageURL + ToWatchedMovies[indexPath.row].poster_path!)
+            cell.title.text = MustWatchedMovies[indexPath.row].title
+            let url = URL(string: Constants.retrievingImageURL + MustWatchedMovies[indexPath.row].poster_path!)
             cell.image.kf.setImage(with: url)
             
-            if ToWatchedMovies[indexPath.row].IsSelected ?? false == true {
+            if MustWatchedMovies[indexPath.row].IsSelected ?? false == true {
                 cell.background.layer.borderWidth = 3
                 cell.background.layer.borderColor = Constants.BackgroundColor.Primary.cgColor
-                setSelectedDataForDetail = ToWatchedMovies[indexPath.row]
+                setSelectedDataForDetail = MustWatchedMovies[indexPath.row]
             }else{
                 cell.background.layer.borderColor = UIColor.clear.cgColor
             }
@@ -379,13 +381,13 @@ extension MoviesViewController: UITableViewDelegate,UITableViewDataSource {
             }
             reloadCollectionViews()
         }else if tableView.tag == 2 {
-            if ToWatchedMovies[indexPath.row].IsSelected ?? false == true {
-                ToWatchedMovies[indexPath.row].IsSelected = false
+            if MustWatchedMovies[indexPath.row].IsSelected ?? false == true {
+                MustWatchedMovies[indexPath.row].IsSelected = false
                 DisableNextBtn()
                 setSelectedDataForDetail = nil
             }else {
                 setAllArraysFalse()
-                ToWatchedMovies[indexPath.row].IsSelected = true
+                MustWatchedMovies[indexPath.row].IsSelected = true
             }
             reloadCollectionViews()
         }
@@ -396,8 +398,8 @@ extension MoviesViewController: UITableViewDelegate,UITableViewDataSource {
         for i in 0..<WatchedMovies.count {
             WatchedMovies[i].IsSelected = false
         }
-        for i in 0..<ToWatchedMovies.count {
-            ToWatchedMovies[i].IsSelected = false
+        for i in 0..<MustWatchedMovies.count {
+            MustWatchedMovies[i].IsSelected = false
         }
         for i in 0..<FavoriteMovies.count {
             FavoriteMovies[i].IsSelected = false
@@ -407,6 +409,7 @@ extension MoviesViewController: UITableViewDelegate,UITableViewDataSource {
     }
 }
 
+// MARK: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource extension
 extension MoviesViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return FavoriteMovies.count
