@@ -1,5 +1,5 @@
 //
-//  WatchedMoviesTableViewCell.swift
+//  ToWatchMoviesTableViewCell.swift
 //  Movie
 //
 //  Created by Alireza Namazi on 4/25/22.
@@ -7,34 +7,39 @@
 
 import UIKit
 
-class WatchedMoviesTableViewCell: UITableViewCell {
-    lazy var background:UIView = {
-      let background = UIView()
-       background.translatesAutoresizingMaskIntoConstraints = false
-       background.backgroundColor = Constants.BackgroundColor.LightGray
-       background.layer.cornerRadius = 5
-      return background
-   }()
-   lazy var image: UIImageView = {
-      let image = UIImageView()
-       image.translatesAutoresizingMaskIntoConstraints = false
-       image.widthAnchor.constraint(equalToConstant: 35).isActive = true
-       image.heightAnchor.constraint(equalToConstant: 35).isActive = true
-       image.layer.cornerRadius = 15
-       image.layer.masksToBounds = true
-       image.contentMode = .scaleAspectFill
-       return image
-   }()
-    lazy var title:UILabel = {
-       let title = UILabel()
-       title.translatesAutoresizingMaskIntoConstraints = false
-       title.numberOfLines = 0
-       title.font = Constants.CustomFont.Avenir_Regular_20
-       return title
-   }()
+class MustWatchMoviesTableViewCell: UITableViewCell {
+
+     lazy var background:UIView = {
+       let background = UIView()
+        background.translatesAutoresizingMaskIntoConstraints = false
+        background.backgroundColor = Constants.BackgroundColor.LightGray
+        background.layer.cornerRadius = 5
+       return background
+    }()
+    lazy var image: UIImageView = {
+       let image = UIImageView()
+        image.translatesAutoresizingMaskIntoConstraints = false
+        image.widthAnchor.constraint(equalToConstant: 35).isActive = true
+        image.heightAnchor.constraint(equalToConstant: 35).isActive = true
+        image.layer.cornerRadius = 15
+        image.layer.masksToBounds = true
+        image.contentMode = .scaleAspectFill
+        return image
+    }()
+     lazy var title:UILabel = {
+        let title = UILabel()
+        title.translatesAutoresizingMaskIntoConstraints = false
+        title.numberOfLines = 0
+        title.font = Constants.CustomFont.Avenir_Regular_20
+        return title
+    }()
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configureUI()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     private func configureUI() {
@@ -59,9 +64,6 @@ class WatchedMoviesTableViewCell: UITableViewCell {
         
         selectionStyle = .none
         backgroundColor = .clear
-        
     }
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    
 }

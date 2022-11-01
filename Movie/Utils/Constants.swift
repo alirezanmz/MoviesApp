@@ -15,8 +15,8 @@ struct Constants {
         
     }
     struct CustomFont {
-        static let Avenir_Regular: UIFont = UIFont(name: "Avenir-Book", size: 20)!
-        static let Roboto_Bold: UIFont = UIFont(name: "Roboto-Bold", size: 12)!
+        static let Avenir_Regular_20: UIFont = UIFont(name: "Avenir-Book", size: 20)!
+        static let Avenir_Regular_13: UIFont = UIFont(name: "Avenir-Book", size: 13)!
     }
     struct TextColor {
         static let libraryTitle: UIColor = UIColor.init(red: 90/255, green: 99/255, blue: 118/255, alpha: 1.0)

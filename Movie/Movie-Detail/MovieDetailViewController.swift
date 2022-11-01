@@ -9,68 +9,77 @@ import UIKit
 import SwiftUI
 
 class MovieDetailViewController: UIViewController {
-    var MoviesDetail:Movies!
+    var selectedDataForDetail:Movies!
     
+    private lazy var Image: UIImageView =  {
+     let image = UIImageView()
+        image.translatesAutoresizingMaskIntoConstraints = false
+        image.layer.cornerRadius = 25
+        image.layer.masksToBounds = true
+        image.contentMode = .scaleAspectFill
+        return image
+    }()
+    
+    private lazy var Background: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.layer.cornerRadius = 10
+        view.backgroundColor = Constants.BackgroundColor.LightGray
+        return view
+    }()
+    
+    private lazy var DetailsContent: UITextView = {
+        let textView = UITextView()
+        textView.translatesAutoresizingMaskIntoConstraints = false
+        textView.font = UIFont(name: "Avenir-Book", size: 25)
+        textView.isEditable = false
+        return textView
+    }()
+    
+    
+    
+    // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
         configureUI()
-        // Do any additional setup after loading the view.
+       
     }
 }
 extension MovieDetailViewController {
     func configureUI() {
+        
         navigationItem.title = "Movie Details"
         view.backgroundColor = .white
+        view.addSubview(DetailsContent)
+        view.addSubview(Background)
         
-        let Image = UIImageView(frame: .zero)
-        let MovieBackView = UIView(frame:.zero)
-        let DetailsTextView = UITextView(frame: .zero)
+        Background.addSubview(Image)
+        Background.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        Background.topAnchor.constraint(equalTo: view.topAnchor,constant: 130).isActive = true
+        Background.widthAnchor.constraint(equalToConstant: 70).isActive = true
+        Background.heightAnchor.constraint(equalToConstant: 100).isActive = true
         
-        
-        view.addSubview(DetailsTextView)
-        view.addSubview(MovieBackView)
-        MovieBackView.addSubview(Image)
-        
-        
-        MovieBackView.translatesAutoresizingMaskIntoConstraints = false
-        Image.translatesAutoresizingMaskIntoConstraints = false
-        DetailsTextView.translatesAutoresizingMaskIntoConstraints = false
-        
-        
-        MovieBackView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        MovieBackView.topAnchor.constraint(equalTo: view.topAnchor,constant: 130).isActive = true
-        MovieBackView.widthAnchor.constraint(equalToConstant: 70).isActive = true
-        MovieBackView.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        
-        MovieBackView.layer.cornerRadius = 10
-        
-        MovieBackView.backgroundColor = Constants.BackgroundColor.LightGray
-        
-        Image.centerXAnchor.constraint(equalTo: MovieBackView.centerXAnchor).isActive = true
-        Image.topAnchor.constraint(equalTo: MovieBackView.topAnchor, constant: 15).isActive = true
+        Image.centerXAnchor.constraint(equalTo: Background.centerXAnchor).isActive = true
+        Image.topAnchor.constraint(equalTo: Background.topAnchor, constant: 15).isActive = true
         Image.widthAnchor.constraint(equalToConstant: 50).isActive = true
         Image.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        
-        
-        Image.image = UIImage(named: "Bmw")
-        Image.layer.cornerRadius = 25
-        Image.layer.masksToBounds = true
-        Image.contentMode = .scaleAspectFill
        
-        DetailsTextView.topAnchor.constraint(equalTo: MovieBackView.bottomAnchor, constant: 10).isActive = true
-        DetailsTextView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 10).isActive = true
-        DetailsTextView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10).isActive = true
-        DetailsTextView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0).isActive = true
+        DetailsContent.topAnchor.constraint(equalTo: Background.bottomAnchor, constant: 10).isActive = true
+        DetailsContent.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 10).isActive = true
+        DetailsContent.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10).isActive = true
+        DetailsContent.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0).isActive = true
         
-        
-        let url = URL(string: Constants.retrievingImageURL + MoviesDetail.poster_path!)
+        let url = URL(string: Constants.retrievingImageURL + selectedDataForDetail.poster_path!)
         Image.kf.setImage(with: url)
-        DetailsTextView.text = MoviesDetail.original_title! + "\r\n\(MoviesDetail.overview!) " + "\n\(MoviesDetail.rating!)" +  "\n\(MoviesDetail.release_date!)" + "\n\(MoviesDetail.original_language!)"
-        
-        print("MoviesDetail",MoviesDetail.original_title! + "\r\n \(MoviesDetail.overview!) " + "\n\(MoviesDetail.rating!)" +  "\n\(MoviesDetail.release_date!)" + "\n\(MoviesDetail.original_language!)")
-        DetailsTextView.font = UIFont(name: "Avenir-Book", size: 25)
-        DetailsTextView.isEditable = false
-        
+        if let original_title = selectedDataForDetail.original_title, let overview = selectedDataForDetail.overview, let rating = selectedDataForDetail.rating, let release_date = selectedDataForDetail.release_date, let original_language = selectedDataForDetail.original_language {
+            
+            DetailsContent.text = original_title + "\r\n\(overview) " + "\n\(rating)" +  "\n\(release_date)" + "\n\(original_language)"
+            
+        }else {
+            
+            DetailsContent.text = "unfortunately, Data is nil"
+            
+        }
     }
 }
