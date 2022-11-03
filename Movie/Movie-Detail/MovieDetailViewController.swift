@@ -9,8 +9,10 @@ import UIKit
 import SwiftUI
 
 class MovieDetailViewController: UIViewController {
+    // MARK: Class props
     var selectedDataForDetail:Movies!
     
+    // MARK: connections
     private lazy var Image: UIImageView =  {
      let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
@@ -31,7 +33,7 @@ class MovieDetailViewController: UIViewController {
     private lazy var DetailsContent: UITextView = {
         let textView = UITextView()
         textView.translatesAutoresizingMaskIntoConstraints = false
-        textView.font = UIFont(name: "Avenir-Book", size: 25)
+        textView.font = Constants.CustomFont.Avenir_Regular_20
         textView.isEditable = false
         return textView
     }()
@@ -46,6 +48,7 @@ class MovieDetailViewController: UIViewController {
        
     }
 }
+// MARK: MovieDetailViewController extensions
 extension MovieDetailViewController {
     func configureUI() {
         

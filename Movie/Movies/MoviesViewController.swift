@@ -8,6 +8,7 @@
 import UIKit
 import Kingfisher
 import SwiftUI
+import GSMessages
 class MoviesViewController: UIViewController{
     // MARK: Class props
     var MoviesList:[Movies] = []
@@ -18,7 +19,7 @@ class MoviesViewController: UIViewController{
     var setSelectedDataForDetail:Movies?
     
     // MARK: connections
-    private lazy var layout:UICollectionViewFlowLayout = {
+    private lazy var layout: UICollectionViewFlowLayout = {
        let collectionViewFlowLayout = UICollectionViewFlowLayout()
           collectionViewFlowLayout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
           collectionViewFlowLayout.minimumInteritemSpacing = 20
@@ -27,7 +28,7 @@ class MoviesViewController: UIViewController{
         return collectionViewFlowLayout
     }()
    
-    var FavoriteListCollectionView:UICollectionView!
+    var FavoriteListCollectionView: UICollectionView!
     
     private lazy var MustWatchedListTableView: UITableView = {
         let tableView = UITableView()
@@ -226,18 +227,22 @@ extension MoviesViewController {
     
     func getMoviesList() {
         APIService().getMoviesList { [self] Response in
-            if Response != nil {
-                self.MoviesList = Response?.results ?? self.MoviesList
+            if let response = Response {
+                self.MoviesList = response.results
                 self.getFavoriteIDsList()
+            }else {
+                self.showMessage("An error has been occurred", type: .error)
             }
         }
     }
     
     func getFavoriteIDsList() {
         APIService().getFavoritesList { Response in
-            if Response != nil {
-                self.FavoriteIDs = Response?.results ?? self.FavoriteIDs
+            if let response = Response {
+                self.FavoriteIDs = response.results
                 self.SortUpData()
+            }else {
+                self.showMessage("An error has been occurred", type: .error)
             }
         }
     }
@@ -257,7 +262,6 @@ extension MoviesViewController {
     }
     
     func SortUpData() {
-        
         WatchedMovies = MoviesList.filter{
             $0.isWatched == true
         }
@@ -272,39 +276,7 @@ extension MoviesViewController {
             }
             FavoriteMovies.insert(contentsOf: FavResult, at: 0)
         }
-        
-        
-        var FindOnlyNesseccryDataForWatched = FavoriteMovies
-        for id in WatchedMovies {
-            for (i,str) in FindOnlyNesseccryDataForWatched.enumerated().reversed()
-            {
-                if str.id == id.id
-                {
-                    FindOnlyNesseccryDataForWatched.remove(at: i)
-                }
-            }
-        }
-        
-        WatchedMovies.insert(contentsOf: FindOnlyNesseccryDataForWatched, at: 0)
-        
-        
-        
-        
-        var FindOnlyNesseccryDataForToWatch = FavoriteMovies
-        for FavIDs in MustWatchedMovies {
-            for (Index,Purpose) in FindOnlyNesseccryDataForToWatch.enumerated().reversed()
-            {
-                if Purpose.id == FavIDs.id
-                {
-                    FindOnlyNesseccryDataForToWatch.remove(at: Index)
-                }
-            }
-        }
-        
-        MustWatchedMovies.insert(contentsOf: FindOnlyNesseccryDataForToWatch, at: 0)
         reloadCollectionViews()
-      
-       
     }
     
     func reloadCollectionViews() {
@@ -432,12 +404,13 @@ extension MoviesViewController: UICollectionViewDelegateFlowLayout, UICollection
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,sizeForItemAt indexPath: IndexPath) -> CGSize {
-    
-    var width = FavoriteMovies[indexPath.row].title!.width(withConstrainedHeight: 30, font: UIFont(name: "Avenir-Book", size: 13)!)
+        var width:CGFloat = 0
+        if let title = FavoriteMovies[indexPath.row].title {
+            width = title.width(withConstrainedHeight: 30, font: Constants.CustomFont.Avenir_Regular_13)
+        }
         if width < 70 {
             width = 70
         }
-    
         return CGSize(width:  width + 10, height: 100)
     }
     
@@ -453,17 +426,5 @@ extension MoviesViewController: UICollectionViewDelegateFlowLayout, UICollection
         }
         reloadCollectionViews()
     }
-    
-    
 }
 
-extension String {
-    func width(withConstrainedHeight height: CGFloat, font: UIFont) -> CGFloat
-    {
-        let constraintRect = CGSize(width: .greatestFiniteMagnitude, height: height)
-        
-        let boundingBox = self.boundingRect(with: constraintRect, options: .usesLineFragmentOrigin, attributes: [NSAttributedString.Key.font: font], context: nil)
-        
-        return boundingBox.width;
-    }
-}

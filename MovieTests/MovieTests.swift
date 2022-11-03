@@ -4,7 +4,7 @@
 //
 //  Created by Alireza Namazi on 4/21/22.
 //
-
+import Alamofire
 import XCTest
 @testable import Movie
 
@@ -18,32 +18,18 @@ class MovieTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testExample() throws {
-        
-        var MoviesList:[Movies] = []
-        var FavoriteIDs:[Favorite] = []
 
-        UnitTestService().getMoviesList { MoviesResponse in
-            MoviesList = MoviesResponse?.results ?? MoviesList
-            XCTAssertEqual(1, MoviesList[0].id)
-           
-        }
-
-        UnitTestService().getFavoritesList { FavoriteResponse in
-            FavoriteIDs = FavoriteResponse?.results ?? FavoriteIDs
-            if let result = FavoriteResponse?.results.isEmpty {
-                XCTAssertTrue(result)
-
+    
+    func testFavoriteApi() throws {
+        guard let url = URL(string: Constants.APIService.FavoriteMoviesList) else { return }
+        AF.request(url, method: .get, parameters: nil).response { response in
+            switch response.result {
+            case .success:
+                XCTAssertTrue(true)
+            case .failure:
+                XCTAssertTrue(false)
             }
-          
-            
         }
-       
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
     }
 
     func testPerformanceExample() throws {

@@ -8,6 +8,7 @@
 import UIKit
 
 class FavoriteMoviesCollectionViewCell: UICollectionViewCell {
+    
     lazy var Title: UILabel = {
        let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false

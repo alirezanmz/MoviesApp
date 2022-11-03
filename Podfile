@@ -10,6 +10,7 @@ target 'Movie' do
       pod 'Alamofire', '5.5.0'
       pod 'ANActivityIndicator', '1.2.0'
       pod 'Kingfisher'
+      pod 'GSMessages', '~> 1.7.3'
       
   target 'MovieTests' do
     inherit! :search_paths
