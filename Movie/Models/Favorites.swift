@@ -6,17 +6,23 @@
 //
 
 import Foundation
-struct FavoriteResponse:Codable {
+class FavoriteResponse:Codable {
     let results:[Favorite]
     init(results: [Favorite]) {
         self.results = results
     }
+    deinit {
+        print("FavoriteResponse has been deinited")
+    }
 }
 
-struct Favorite:Codable {
+class Favorite:Codable {
     var id:Int?
-    init(from decoder: Decoder) throws {
+    required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.id = try container.decodeIfPresent(Int.self, forKey: .id)
+    }
+    deinit {
+        print("Favorite has been deinited")
     }
 }

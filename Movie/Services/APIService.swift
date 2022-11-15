@@ -31,7 +31,6 @@ open class APIService {
             case .failure:
                 completion(nil)
             }
-            ANActivityIndicatorPresenter.shared.hideIndicator()
         }
     }
     
@@ -55,7 +54,6 @@ open class APIService {
             case .failure:
                 completion(nil)
             }
-            ANActivityIndicatorPresenter.shared.hideIndicator()
         }
     }
 }

@@ -10,7 +10,7 @@ import SwiftUI
 
 class MovieDetailViewController: UIViewController {
     // MARK: Class props
-    var selectedDataForDetail:Movies!
+    weak var selectedDataForDetail:Movies!
     
     // MARK: connections
     private lazy var Image: UIImageView =  {
@@ -84,5 +84,6 @@ extension MovieDetailViewController {
             DetailsContent.text = "unfortunately, Data is nil"
             
         }
+        selectedDataForDetail = nil
     }
 }

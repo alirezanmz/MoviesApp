@@ -12,7 +12,7 @@ struct MoviesResponse:Codable {
 }
 
 
-struct Movies:Codable {
+class Movies:Codable {
     let backdrop_path:String?
     let id:Int?
     let original_language:String?
@@ -25,18 +25,23 @@ struct Movies:Codable {
     let rating:Float?
     let isWatched:Bool?
     var IsSelected:Bool?
-    init(backdrop_path: String?, id: Int?, original_language: String?, original_title: String?, overview: String?, popularity: Float?, poster_path: String?, release_date: String?, title: String?, rating: Float?, isWatched: Bool?, IsSelected: Bool? = nil) {
-        self.backdrop_path = backdrop_path
-        self.id = id
-        self.original_language = original_language
-        self.original_title = original_title
-        self.overview = overview
-        self.popularity = popularity
-        self.poster_path = poster_path
-        self.release_date = release_date
-        self.title = title
-        self.rating = rating
-        self.isWatched = isWatched
-        self.IsSelected = IsSelected
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.backdrop_path = try container.decodeIfPresent(String.self, forKey: .backdrop_path)
+        self.id = try container.decodeIfPresent(Int.self, forKey: .id)
+        self.original_language = try container.decodeIfPresent(String.self, forKey: .backdrop_path)
+        self.original_title = try container.decodeIfPresent(String.self, forKey: .original_title)
+        self.overview = try container.decodeIfPresent(String.self, forKey: .overview)
+        self.popularity = try container.decodeIfPresent(Float.self, forKey: .popularity)
+        self.poster_path = try container.decodeIfPresent(String.self, forKey: .poster_path)
+        self.release_date = try container.decodeIfPresent(String.self, forKey: .release_date)
+        self.title = try container.decodeIfPresent(String.self, forKey: .title)
+        self.rating = try container.decodeIfPresent(Float.self, forKey: .rating)
+        self.isWatched = try container.decodeIfPresent(Bool.self, forKey: .isWatched)
+        self.IsSelected = try container.decodeIfPresent(Bool.self, forKey: .IsSelected)
+    }
+    
+    deinit {
+        print("Movies has been deinited")
     }
 }

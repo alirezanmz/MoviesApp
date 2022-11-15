@@ -9,6 +9,7 @@ import UIKit
 import Kingfisher
 import SwiftUI
 import GSMessages
+import ANActivityIndicator
 class MoviesViewController: UIViewController{
     // MARK: Class props
     var MoviesList:[Movies] = []
@@ -16,7 +17,7 @@ class MoviesViewController: UIViewController{
     var WatchedMovies:[Movies] = []
     var MustWatchedMovies:[Movies] = []
     var FavoriteIDs:[Favorite] = []
-    var setSelectedDataForDetail:Movies?
+    weak var setSelectedDataForDetail:Movies?
     
     // MARK: connections
     private lazy var layout: UICollectionViewFlowLayout = {
@@ -210,14 +211,35 @@ extension MoviesViewController {
         WatchedListTableView.delegate = self
         WatchedListTableView.dataSource = self
         getMoviesList()
-        
+       
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+               
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            
+            //when self is nil the ViewController has deinnited, so no leak
+            guard let self = self else { return }
+            
+            //if all these properties are nil the ViewController is considered to have leaked
+            if self.view.window == nil && self.parent == nil && self.presentedViewController == nil {
+                print("Leaked ViewController detected: \(self)")
+            }
+        }
     }
     
     @objc func NextBtn() {
+   
+
         if setSelectedDataForDetail != nil {
-            let Detail = MovieDetailViewController()
-            Detail.selectedDataForDetail = self.setSelectedDataForDetail
-            self.navigationController?.pushViewController(Detail, animated: true)
+            DispatchQueue.main.async { [weak self] in
+                let Detail = MovieDetailViewController()
+                guard let self = self else { return }
+                Detail.selectedDataForDetail = self.setSelectedDataForDetail
+                self.navigationController?.pushViewController(Detail, animated: true)
+                self.setSelectedDataForDetail = nil
+            }
         }else {
             let Alert = UIAlertController(title: "Erorr", message: "Please select a Movie.", preferredStyle: .alert)
             Alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
@@ -226,7 +248,8 @@ extension MoviesViewController {
     }
     
     func getMoviesList() {
-        APIService().getMoviesList { [self] Response in
+        APIService().getMoviesList { [weak self] Response in
+            guard let self = self else { return }
             if let response = Response {
                 self.MoviesList = response.results
                 self.getFavoriteIDsList()
@@ -237,7 +260,8 @@ extension MoviesViewController {
     }
     
     func getFavoriteIDsList() {
-        APIService().getFavoritesList { Response in
+        APIService().getFavoritesList { [weak self] Response in
+            guard let self = self else { return }
             if let response = Response {
                 self.FavoriteIDs = response.results
                 self.SortUpData()
@@ -276,11 +300,13 @@ extension MoviesViewController {
             }
             FavoriteMovies.insert(contentsOf: FavResult, at: 0)
         }
+        MoviesList.removeAll()
         reloadCollectionViews()
     }
     
     func reloadCollectionViews() {
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             self.FavoriteListCollectionView.reloadData()
             self.WatchedListTableView.reloadData()
             self.MustWatchedListTableView.reloadData()
@@ -292,7 +318,9 @@ extension MoviesViewController {
 // MARK: UITableViewDelegate, UITableViewDataSource extensions
 extension MoviesViewController: UITableViewDelegate,UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
+        if WatchedMovies.count > 0 || MustWatchedMovies.count > 0 {
+            ANActivityIndicatorPresenter.shared.hideIndicator()
+        }
         if tableView.tag == 1 {
             return WatchedMovies.count
         }else if tableView.tag == 2 {

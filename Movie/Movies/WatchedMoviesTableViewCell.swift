@@ -53,7 +53,7 @@ class WatchedMoviesTableViewCell: UITableViewCell {
         background.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         background.topAnchor.constraint(equalTo: topAnchor, constant: 5).isActive = true
         
-        image.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+    
         image.leftAnchor.constraint(equalTo: leftAnchor,constant: 20).isActive = true
         image.centerYAnchor.constraint(equalTo: background.centerYAnchor).isActive = true
         
